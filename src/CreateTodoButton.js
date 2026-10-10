@@ -1,13 +1,15 @@
-function CreateTodoButton(props) {
-  const onClickButton = () => {
-    alert('Aqui deberia abrir el modal');
-  };    
 
+function CreateTodoButton({ onClick }) {
   return (
-    <button onClick={onClickButton}>
-      +
+    <button
+      className="CreateTodoButton"
+      type="button"
+      onClick={onClick}
+      aria-label="Agregar una nueva tarea"
+    >
+      + Agregar TODO
     </button>
   );
-}   
+}
 
 export { CreateTodoButton };

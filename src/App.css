@@ -2,9 +2,34 @@
   text-align: center;
 }
 
+/* Espaciado del contador */
+.TodoCounter {
+  margin: 0 0 18px;
+  color: #000;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.TodoCounter span {
+  color: #61dafb;
+}
+
+/* Separación del buscador respecto a la lista */
+.TodoSearch {
+  margin-bottom: 100px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .TodoCounter {
+    font-size: 1.6rem;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -35,4 +60,95 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+/* ==============================
+   CREATE TODO BUTTON
+   ============================== */
+
+.CreateTodoButton {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 18px;
+
+  border: none;
+  border-radius: 12px;
+
+  background-color: #61dafb;
+  color: #1a202c;
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.CreateTodoButton:hover {
+  background-color: #38bdf8;
+}
+
+/* ==============================
+   CREATE TODO FORM
+   ============================== */
+
+.CreateTodoForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin-top: 20px;
+  padding: 16px;
+
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 12px;
+}
+
+.CreateTodoForm-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px;
+
+  border: 1px solid #4a5568;
+  border-radius: 8px;
+
+  background-color: #252d3b;
+  color: #f5f5f5;
+  font-size: 1rem;
+}
+
+.CreateTodoForm-input:focus {
+  outline: 2px solid #61dafb;
+  outline-offset: 2px;
+}
+
+.CreateTodoForm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.CreateTodoForm-actions button {
+  flex: 1;
+  min-height: 42px;
+  padding: 10px 14px;
+
+  border: none;
+  border-radius: 8px;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.CreateTodoForm-actions button[type="submit"] {
+  background-color: #48bb78;
+  color: #102a1c;
+}
+
+.CreateTodoForm-actions button[type="button"] {
+  background-color: #2d3748;
+  color: #f5f5f5;
 }
