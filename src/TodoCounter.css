@@ -1,0 +1,11 @@
+.todo-counter {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000000;
+  text-align: center;
+}
+
+.todo-counter__highlight {
+  color: #61dafb;
+}
