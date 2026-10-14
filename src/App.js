@@ -15,11 +15,18 @@ const initialTodos = [
 function App() {
   const [todos, setTodos] = useState(initialTodos);
   const [newTodoValue, setNewTodoValue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
 
   const completedTodos = todos.filter(
     (todo) => todo.completed
   ).length;
+
+  const normalizedSearch = searchValue.trim().toLowerCase();
+
+  const searchedTodos = todos.filter((todo) =>
+    todo.text.toLowerCase().includes(normalizedSearch)
+  );
 
   function toggleTodo(id) {
     setTodos((currentTodos) =>
@@ -31,17 +38,26 @@ function App() {
     );
   }
 
+  function deleteTodo(id) {
+    setTodos((currentTodos) =>
+      currentTodos.filter((todo) => todo.id !== id)
+    );
+  }
+
   function addTodo(event) {
     event.preventDefault();
-    if (newTodoValue.trim() === '') return;
+
+    const text = newTodoValue.trim();
+
+    if (!text) return;
 
     const newTodo = {
-      id: Date.now(),
-      text: newTodoValue,
+      id: crypto.randomUUID(),
+      text,
       completed: false,
     };
 
-    setTodos([...todos, newTodo]);
+    setTodos((currentTodos) => [...currentTodos, newTodo]);
     setNewTodoValue('');
     setShowNewTodoForm(false);
   }
@@ -53,15 +69,19 @@ function App() {
         total={todos.length}
       />
 
-      <TodoSearch />
+      <TodoSearch
+        value={searchValue}
+        onChange={setSearchValue}
+      />
 
       <TodoList>
-        {todos.map((todo) => (
+        {searchedTodos.map((todo) => (
           <TodoItem
             key={todo.id}
             text={todo.text}
             completed={todo.completed}
             onComplete={() => toggleTodo(todo.id)}
+            onDelete={() => deleteTodo(todo.id)}
           />
         ))}
       </TodoList>
@@ -71,15 +91,16 @@ function App() {
           <input
             className="CreateTodoForm-input"
             type="text"
-            placeholder="Añadir nuevo TODO"
+            placeholder="Escribe una nueva tarea..."
             value={newTodoValue}
             onChange={(event) => setNewTodoValue(event.target.value)}
             autoFocus
-            aria-label="Nombre del nuevo TODO"
+            aria-label="Nombre de la nueva tarea"
           />
 
           <div className="CreateTodoForm-actions">
-            <button type="submit">Guardar TODO</button>
+            <button type="submit">Guardar tarea</button>
+
             <button
               type="button"
               onClick={() => {
@@ -93,7 +114,9 @@ function App() {
         </form>
       )}
 
-      <CreateTodoButton onClick={() => setShowNewTodoForm(true)} />
+      <CreateTodoButton
+        onClick={() => setShowNewTodoForm(true)}
+      />
     </div>
   );
 }

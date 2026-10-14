@@ -1,7 +1,7 @@
 
 import './TodoItem.css';
 
-function TodoItem({ text, completed, onComplete }) {
+function TodoItem({ text, completed, onComplete, onDelete }) {
   return (
     <li className="TodoItem">
       <button
@@ -31,6 +31,7 @@ function TodoItem({ text, completed, onComplete }) {
       <button
         type="button"
         className="TodoItem-delete"
+        onClick={onDelete}
         aria-label={`Eliminar tarea: ${text}`}
       >
         X

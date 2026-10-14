@@ -1,11 +1,15 @@
+
 import './TodoSearch.css';
 
-function TodoSearch() {
+function TodoSearch({ value, onChange }) {
   return (
     <input
-      className="todo-search"
-      type="text"
+      className="TodoSearch"
+      type="search"
       placeholder="Buscar TODO..."
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      aria-label="Buscar tareas"
     />
   );
 }
