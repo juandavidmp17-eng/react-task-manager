@@ -4,6 +4,7 @@ import { TodoSearch } from './TodoSearch';
 import { TodoList } from './TodoList';
 import { TodoItem } from './TodoItem';
 import { CreateTodoButton } from './CreateTodoButton';
+import { TodoFilters } from './TodoFilters';
 import './App.css';
 
 const initialTodos = [
@@ -17,9 +18,10 @@ function App() {
   const [newTodoValue, setNewTodoValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
+  const [filter, setFilter] = useState('all');
 
   const completedTodos = todos.filter(
-    (todo) => todo.completed
+    (todo) => !!todo.completed
   ).length;
 
   const normalizedSearch = searchValue.trim().toLowerCase();
@@ -27,6 +29,18 @@ function App() {
   const searchedTodos = todos.filter((todo) =>
     todo.text.toLowerCase().includes(normalizedSearch)
   );
+
+  const filteredTodos = searchedTodos.filter((todo) => {
+  if (filter === 'pending') {
+    return !todo.completed;
+  }
+
+  if (filter === 'completed') {
+    return todo.completed;
+  }
+
+  return true;
+});
 
   function toggleTodo(id) {
     setTodos((currentTodos) =>
@@ -74,8 +88,13 @@ function App() {
         onChange={setSearchValue}
       />
 
+      <TodoFilters
+         filter={filter}
+         setFilter={setFilter}
+        />
+
       <TodoList>
-        {searchedTodos.map((todo) => (
+        {filteredTodos.map((todo) => (
           <TodoItem
             key={todo.id}
             text={todo.text}
