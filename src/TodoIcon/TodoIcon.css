@@ -1,0 +1,13 @@
+.Icon-svg svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.TodoItem-delete:hover .Icon-svg--delete svg {
+  color: #fc8181;
+}
+
+.TodoItem-checkbox:hover .Icon-svg--check svg {
+  color: #48bb78;
+}
