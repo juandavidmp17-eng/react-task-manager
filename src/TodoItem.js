@@ -21,7 +21,7 @@ function TodoItem({ text, completed, onComplete, onDelete }) {
         }
         aria-pressed={completed}
       >
-        <CompleteIcon />
+        <CompleteIcon completed={completed} />
       </button>
 
       <p
