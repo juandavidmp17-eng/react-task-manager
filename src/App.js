@@ -7,14 +7,35 @@ import { CreateTodoButton } from './CreateTodoButton';
 import { TodoFilters } from './TodoFilters';
 import './App.css';
 
-const initialTodos = [
+/*const initialTodos = [
   { id: 1, text: 'Hacer ejercicio', completed: true },
   { id: 2, text: 'Estudiar React', completed: false },
   { id: 3, text: 'Comprar comida', completed: false },
-];
+];*/
+const LOCAL_STORAGE_KEY = 'TODOS_V1';
+
+const localStorageTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+let parsedTodos;
+
+if (!localStorageTodos) {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
+  parsedTodos = [];
+} else {
+  parsedTodos = JSON.parse(localStorageTodos);
+}
 
 function App() {
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState(parsedTodos);
+
+  function saveTodos(newTodos) {
+  const stringifiedTodos = JSON.stringify(newTodos);
+
+  localStorage.setItem(LOCAL_STORAGE_KEY, stringifiedTodos);
+
+  setTodos(newTodos);
+}
+
   const [newTodoValue, setNewTodoValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
@@ -42,21 +63,24 @@ function App() {
   return true;
 });
 
-  function toggleTodo(id) {
-    setTodos((currentTodos) =>
-      currentTodos.map((todo) =>
-        todo.id === id
-          ? { ...todo, completed: !todo.completed }
-          : todo
-      )
-    );
-  }
 
-  function deleteTodo(id) {
-    setTodos((currentTodos) =>
-      currentTodos.filter((todo) => todo.id !== id)
-    );
-  }
+function toggleTodo(id) {
+  const newTodos = todos.map((todo) =>
+    todo.id === id
+      ? { ...todo, completed: !todo.completed }
+      : todo
+  );
+
+  saveTodos(newTodos);
+}
+
+function deleteTodo(id) {
+  const newTodos = todos.filter(
+    (todo) => todo.id !== id
+  );
+
+  saveTodos(newTodos);
+}
 
   function addTodo(event) {
     event.preventDefault();
@@ -71,7 +95,8 @@ function App() {
       completed: false,
     };
 
-    setTodos((currentTodos) => [...currentTodos, newTodo]);
+    const newTodos = [...todos, newTodo];
+    saveTodos(newTodos);
     setNewTodoValue('');
     setShowNewTodoForm(false);
   }
