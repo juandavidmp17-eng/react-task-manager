@@ -5,36 +5,19 @@ import { TodoList } from './TodoList';
 import { TodoItem } from './TodoItem';
 import { CreateTodoButton } from './CreateTodoButton';
 import { TodoFilters } from './TodoFilters';
+import { useLocalStorage } from './Hooks/useLocalStorage';
 import './App.css';
+
 
 /*const initialTodos = [
   { id: 1, text: 'Hacer ejercicio', completed: true },
   { id: 2, text: 'Estudiar React', completed: false },
   { id: 3, text: 'Comprar comida', completed: false },
 ];*/
-const LOCAL_STORAGE_KEY = 'TODOS_V1';
 
-const localStorageTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-let parsedTodos;
-
-if (!localStorageTodos) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
-  parsedTodos = [];
-} else {
-  parsedTodos = JSON.parse(localStorageTodos);
-}
 
 function App() {
-  const [todos, setTodos] = useState(parsedTodos);
-
-  function saveTodos(newTodos) {
-  const stringifiedTodos = JSON.stringify(newTodos);
-
-  localStorage.setItem(LOCAL_STORAGE_KEY, stringifiedTodos);
-
-  setTodos(newTodos);
-}
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
 
   const [newTodoValue, setNewTodoValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
@@ -95,8 +78,7 @@ function deleteTodo(id) {
       completed: false,
     };
 
-    const newTodos = [...todos, newTodo];
-    saveTodos(newTodos);
+    const newTodos = [...todos, newTodo];saveTodos (newTodos);
     setNewTodoValue('');
     setShowNewTodoForm(false);
   }
