@@ -1,23 +1,41 @@
+
 import { useState } from 'react';
 import { AppUI } from './AppUI';
 import { useLocalStorage } from '../Hooks/useLocalStorage';
 import '../App.css';
 
-
-/*const initialTodos = [
-  { id: 1, text: 'Hacer ejercicio', completed: true },
-  { id: 2, text: 'Estudiar React', completed: false },
-  { id: 3, text: 'Comprar comida', completed: false },
-];*/
-
+const INITIAL_TODOS = [];
 
 function App() {
-  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
+  const {
+    item: todos,
+    saveItem: saveTodos,
+    loading,
+    error,
+  } = useLocalStorage('TODOS_V1', INITIAL_TODOS);
 
   const [newTodoValue, setNewTodoValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
   const [filter, setFilter] = useState('all');
+
+  // Estado de carga
+  if (loading) {
+    return (
+      <div className="App">
+        <p>Cargando tus tareas...</p>
+      </div>
+    );
+  }
+
+  // Estado de error
+  if (error) {
+    return (
+      <div className="App">
+        <p>Ocurrió un error al cargar tus tareas.</p>
+      </div>
+    );
+  }
 
   const completedTodos = todos.filter(
     (todo) => !!todo.completed
@@ -30,35 +48,34 @@ function App() {
   );
 
   const filteredTodos = searchedTodos.filter((todo) => {
-  if (filter === 'pending') {
-    return !todo.completed;
+    if (filter === 'pending') {
+      return !todo.completed;
+    }
+
+    if (filter === 'completed') {
+      return todo.completed;
+    }
+
+    return true;
+  });
+
+  function toggleTodo(id) {
+    const newTodos = todos.map((todo) =>
+      todo.id === id
+        ? { ...todo, completed: !todo.completed }
+        : todo
+    );
+
+    saveTodos(newTodos);
   }
 
-  if (filter === 'completed') {
-    return todo.completed;
+  function deleteTodo(id) {
+    const newTodos = todos.filter(
+      (todo) => todo.id !== id
+    );
+
+    saveTodos(newTodos);
   }
-
-  return true;
-});
-
-
-function toggleTodo(id) {
-  const newTodos = todos.map((todo) =>
-    todo.id === id
-      ? { ...todo, completed: !todo.completed }
-      : todo
-  );
-
-  saveTodos(newTodos);
-}
-
-function deleteTodo(id) {
-  const newTodos = todos.filter(
-    (todo) => todo.id !== id
-  );
-
-  saveTodos(newTodos);
-}
 
   function addTodo(event) {
     event.preventDefault();
@@ -73,33 +90,32 @@ function deleteTodo(id) {
       completed: false,
     };
 
-    const newTodos = [...todos, newTodo];saveTodos (newTodos);
+    const newTodos = [...todos, newTodo];
+
+    saveTodos(newTodos);
     setNewTodoValue('');
     setShowNewTodoForm(false);
-  };
+  }
 
   return (
     <AppUI
-  completedTodos={completedTodos}
-  todos={todos}
-  searchValue={searchValue}
-  setSearchValue={setSearchValue}
-  filteredTodos={filteredTodos}
-  toggleTodo={toggleTodo}
-  deleteTodo={deleteTodo}
-  newTodoValue={newTodoValue}
-  setNewTodoValue={setNewTodoValue}
+      completedTodos={completedTodos}
+      todos={todos}
+      searchValue={searchValue}
+      setSearchValue={setSearchValue}
+      filteredTodos={filteredTodos}
+      toggleTodo={toggleTodo}
+      deleteTodo={deleteTodo}
+      newTodoValue={newTodoValue}
+      setNewTodoValue={setNewTodoValue}
       filter={filter}
       setFilter={setFilter}
       showNewTodoForm={showNewTodoForm}
       setShowNewTodoForm={setShowNewTodoForm}
       addTodo={addTodo}
     />
-
-
   );
-
-
 }
 
 export default App;
+
